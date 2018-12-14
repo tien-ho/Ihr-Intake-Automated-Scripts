@@ -1,0 +1,1929 @@
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+
+   "title": "CENTRI_HEALTH_RESPONSE",
+   "description": "v1.0 - The general response of CentriHealth API",
+
+	"definitions": 
+	{
+		"NPIobj": 
+		{
+			"type": "string",
+			"#comment": "^[0-9]{10}$"
+		},
+		"DEAobj": 
+		{
+			"type": "string",
+			"#comment": "^([A-H,J-M,P,R-U,X]|[a-h,j-m,p,r-u,x])(([A-Z]|[a-z])|9)[0-9]{7}$"
+		},
+		"pMDMobj": 
+		{
+			"type": "string"
+		},
+		"MPINobj": 
+		{
+			"type": "string"
+		},
+		"FirstNameobj": 
+		{
+			"type": "string"
+		},
+		"LastNameobj": 
+		{
+			"type": "string"
+		},
+		"DOBobj": 
+		{
+			"type": "string",
+			"format": "date"
+		},
+		"EmpNumobj": 
+		{
+			"type": "string"
+		},
+		"SSNobj": 
+		{
+			"type": "string"
+		},
+		"AltIDobj": 
+		{
+			"type": "string"
+		},
+		"SubIDobj": 
+		{
+			"type": "string"
+		},
+		"PolicyNumobj": 
+		{
+			"type": "string"
+		},
+		"ServiceIDobj": 
+		{
+			"type": "string"
+		},
+		"PresenceStateObj": 
+		{
+			"enum": 
+			[
+				"Past","PAST",
+				"Present","PRESENT",
+				"planned occurence","PLANNED OCCURENCE"
+			]
+		},
+		"DateObj": 
+		{
+			"type": "string",
+			"format": "date"
+		},
+		"LanguageObj": 
+		{
+			"enum": 
+			[
+				"EN",
+				"SP",
+				"PR"
+			]
+		},
+		"NumberOptionObj": 
+		{
+			"oneOf":[{ "type": "number"},
+				 { "type": "null" }
+				]
+		},
+		"DateOptionObj": 
+		{
+			"oneOf":[{ "type": "string", "format": "date" },
+				 { "type": "null" }
+				]
+		},
+		"StringOptionObj": 
+		{
+			"oneOf":[{ "type": "string" },
+				 { "type": "null" }
+				]
+		},
+
+		"Big5obj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"firstName": 
+				{
+					"$ref": "#/definitions/FirstNameobj"
+				},
+				"searchID": 
+				{
+					"$ref": "#/definitions/ServiceIDobj"
+				},
+				"lastName": 
+				{
+					"$ref": "#/definitions/LastNameobj"
+				},
+				"dateOfBirth": 
+				{
+					"$ref": "#/definitions/DOBobj"
+				},
+				"policyNumber": 
+				{
+					"$ref": "#/definitions/PolicyNumobj"
+				}
+			},
+			"required": 
+			[
+				"idType",
+				"idValue",
+				"big5"
+			]
+
+		},
+		"ID2obj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"idType": 
+				{
+					"enum": 
+					[
+						"firstName",
+						"lastName",
+						"dateOfBirth",
+						"policyNumber",
+						"searchId"
+					]
+				},
+				"idValue": 
+				{
+					"type": "string"
+				},
+				"big5": 
+				{
+					"$ref": "#/definitions/Big5obj"
+				}
+			},
+			"required": 
+			[
+				"idType",
+				"idValue",
+				"big5"
+			]
+		},
+		"IDobj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"idType": 
+				{
+					"enum": 
+					[
+						"RALLYID",
+						"IHRID"
+					]
+				},
+				"idValue": 
+				{
+					"type": "string"
+				}
+			},
+			"required": 
+			[
+				"idType",
+				"idValue"
+			]
+
+		},
+
+		"CONDvocabObj": 
+		{
+			"description": "Generic source vocabulary for conditions",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"ICD10 Diagnosis Code",
+						"IHR Ontology",
+						"SNOMEDCT Clinical Finding Foreign Key",
+						"ICD9 Diagnosis Code",
+						"CPT4/HCPCS Vocabulary",
+						"Concept Key",
+						""
+					],
+					"description": "There are many variations (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"STATUSvocabObj": 
+		{
+			"description": "Generic source vocabulary for condition status",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"IHR Ontology",
+						"HL7v2 Result Status - Table 0123 - Foreign Key",
+						"HL7v2 Allergy Clinical Status - Table 0438 Foreign Key",
+						"SNOMEDCT Qualifier Foreign Key",
+						"ICD9 Diagnosis Code",
+						"CPT4/HCPCS Vocabulary",
+						"Concept Key",
+						""
+					],
+					"description": "There are many variations (e.g., ICD-9, ICD-10, SNOMED, HL7V3)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"ALLERGENvocabObj": 
+		{
+			"description": "Generic source vocabulary for allergen",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"IHR Ontology",
+						"SNOMEDCT Pharmaceutical Foreign Key",
+						"SNOMEDCT Substance Foreign Key",
+						"HL7v2 Allergen Type - Table 0127 Foreign Key",
+						"RxNorm Foreign Key",
+						"Multum Allergy Category Foreign Key",
+						"UNII Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|SNOMED|HL7V2|RXNORM|MULTUM)[.]*",
+					"description": "The most recent source vocabulary that added/updated the allergen (e.g., RXNORM, HL7V2, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"REACTIONvocabObj": 
+		{
+			"description": "Generic source vocabulary for reaction",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"SNOMEDCT Substance Foreign Key",
+						"HL7v2 Allergy Severity - Table 0128 Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(SNOMED|HL7V2|ICD-10)[.]*",
+					"description": "The most recent source vocabulary that added/updated the reaction (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"SEVERITYvocabObj": 
+		{
+			"description": "Generic source vocabulary for severity",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"#comment": "(SNOMED|HL7V2|ICD-10)[.]*",
+					"enum":
+					[
+						"SNOMEDCT Substance Foreign Key",
+						"HL7v2 Allergy Severity - Table 0128 Foreign Key",
+						"Concept Key",
+						""
+					],
+					"description": "The most recent source vocabulary that added/updated the severity (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"MEDICATIONvocabObj": 
+		{
+			"description": "Generic source vocabulary for medication",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"NDC Foreign Key",
+						"CPT4/HCPCS Vocabulary",
+						"IHR Ontology",
+						"SNOMEDCT Pharmaceutical Foreign Key",
+						"RxNorm Foreign Key",
+						"UHG Medication Foreign Key",
+						"First Data Bank (FDB) Medication Codes Foreign Key",
+						"Medispan Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment":"(ICD-9|ICD-10|SNOMED|HL7V2|RXNORM|CPT4|MEDISPAN|NDC|MULTUM)[.]*",
+					"description": "Many variations (e.g., ICD-9, ICD-10, SNOMED, MEDISPAN,RXNORM, FDB, HCPCSCPT, NDC)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"DosageFormObj": 
+		{
+			"oneOf":[
+				{ "type":"null" },
+				{ "type":"object",
+				  "properties": 
+				  {
+					"dosageForm": 
+					{
+						"type": "string"
+					},
+					"dosageFormsourceVocabulary": 
+					{
+						"enum":
+						[
+							"IHR Ontology",
+							"NDF-RT Foreign Key",
+							"NCI Thesaurus Foreign Key",
+							"Medispan Dosage Form Foreign Key",
+							"FDA Dosage Form Foreign Key",
+							"Concept Key",
+							""
+						],
+						"type": "string"
+					},
+					"dosageFormsourceVocabularyCode": 
+					{
+						"type": "string"
+					}
+				  }
+				}]
+		},
+		"MEDDEVICEvocabObj": 
+		{
+			"description": "Generic source vocabulary for medical device",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"IHR Ontology",
+						"NDC Foreign Key",
+						"CPT4/HCPCS Vocabulary",
+						"RxNorm Foreign Key",
+						"Medispan Product Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(NDC|HCPCS|MEDISPAN|RXNORM|ICD-9|CPT4|HL7V2|ICD-10)[.]*",
+					"description": "The most recent source vocabulary that added/updated the medical device (e.g., ICD-9, ICD-10, HL7V2)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+
+		"EVENTvocabObj": 
+		{
+			"description": "Generic source vocabulary for event",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"LCA Procedure Foreign Key",
+						"Quest Diagnostics Procedure Foreign Key",
+						"CPT4/HCPCS Vocabulary",
+						"IHR Ontology",
+						"SNOMEDCT Procedure Foreign Key", 
+						"ICD9 Diagnosis Code",
+						"ICD9 Procedure Code", 
+						"ICD10 Diagnosis Code",
+						"ICD10 Procedure Code", 
+						"LOINC Foreign Key",
+						"NUBC Revenue Code Foreign Key", 
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|LOINC|LCA|QUEST|CPT4|HCPCS|NUBC)[.]*",
+					"description": "The most recent source vocabulary that added/updated the event (e.g., ICD-9, ICD-10, LOINC)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"SPECIMENvocabObj": 
+		{
+			"description": "Generic source vocabulary for specimen",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"SNOMEDCT Specimen Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|ICD-9|LCA|QUEST|CPT4|HCPCS|NUBC|HL7V2|SNOMEDCT)[.]*",
+					"description": "The most recent source vocabulary that added/updated the specimen (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+
+		"VISITvocabObj": 
+		{
+			"description": "Generic source vocabulary for visit",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"CPT4/HCPCS Vocabulary",
+						"SNOMEDCT Procedure Foreign Key",
+						"NUBC Revenue Code Foreign Key",
+						"IHR Ontology", 
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|ICD-9|LCA|QUEST|CPT4|HCPCS|NUBC|HL7V2|SNOMEDCT)[.]*",
+					"description": "The most recent source vocabulary that added/updated the visit (e.g., ICD-9, ICD-10, HCPCS)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"DISCHARGEvocabObj": 
+		{
+			"description": "Generic source vocabulary for discharge disposition",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"UHG Discharge Disposition Foreign Key", 
+						"IP ADT Discharge Disposition", 
+						"NUBC Discharge Disposition Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|ICD-9|LCA|QUEST|CPT4|HCPCS|NUBC|HL7V2|SNOMEDCT)[.]*",
+					"description": "The most recent source vocabulary that added/updated the discharge disposition (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"DIAGNOSISvocabObj": 
+		{
+			"description": "Generic source vocabulary for diagnosis",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"ICD10 Diagnosis Code", 
+						"ICD9 Diagnosis Code", 
+						"SNOMEDCT Clinical Finding Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|ICD-9|LCA|QUEST|CPT4|HCPCS|NUBC|HL7V2|SNOMEDCT)[.]*",
+					"description": "The most recent source vocabulary that added/updated the diagnosis (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"OBSERVATIONvocabObj": 
+		{
+			"description": "Generic source vocabulary for observation",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"LCA Observation Foreign Key", 
+						"HL7v2 Abnormal Flags - Table 0078 Foreign Key",
+						"LOINC Observation Foreign Key",
+						"Quest Diagnostics Observation Foreign Key",
+						"SNOMEDCT Observable Entity Foreign Key", 
+						"UHG Observation Foreign Key", 
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|LOINC|LCA|QUEST|SNOMED|HL7v2|HLV2)[.]*",
+					"description": "The most recent source vocabulary that added/updated the observation (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"OBSERVATIONVALUEvocabObj": 
+		{
+			"description": "Generic source vocabulary for observation",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"Standard Geographical Classification (SGC) Foreign Key",
+						"SNOMEDCT Body Structure Foreign Key",
+						"SNOMEDCT Environment or Geographical Location Foreign Key",
+						"SNOMEDCT Linkage Concept Foreign Key",
+						"HL7v2 Body Parts - Table 0550 Foreign Key",
+						"NUBC Occurrence Code Foreign Key",
+						"NUBC Value Code for Amount Foreign Key",
+						"SNOMEDCT Organism Foreign Key",
+						"SNOMEDCT Physical Force Foreign Key",
+						"SNOMEDCT Physical Object Foreign Key",
+						"SNOMEDCT Qualifier Foreign Key",
+						"SNOMEDCT Record Artifact Foreign Key",
+						"SNOMEDCT Situation with Explicit Context Foreign Key",
+						"SNOMEDCT Social Context Foreign Key",
+						"SNOMEDCT Staging and Scales Foreign Key",
+						"X12 Tooth Status Foreign Key",
+						"X12 Tooth Surface Foreign Key",
+						"X12_1073 yes/no - 1073 foreign key",
+						"Custom Key",
+						""
+					],
+					"#comment": "(ICD-10|LOINC|LCA|QUEST|SNOMED|HL7v2|HLV2)[.]*",
+					"description": "The most recent source vocabulary that added/updated the observation (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+		"OBSERVATIONUNITvocabObj": 
+		{
+			"description": "Generic source vocabulary for observation unit of measure",
+			"type": "object",
+			"properties": 
+			{
+				"sourceVocabulary": 
+				{
+					"type": "string",
+					"enum":
+					[
+						"HL7v2 Units - Table 0574 - Foreign Key",
+						"IHR Ontology",
+						"SNOMEDCT Substance Foreign Key", 
+						"ISO Unit 4217 Foreign Key",
+						"NUBC Unit of Measure Foreign Key",
+						"Concept Key",
+						""
+					],
+					"#comment": "(ICD-10|LOINC|LCA|QUEST|SNOMED|HL7v2|HLV2)[.]*",
+					"description": "The most recent source vocabulary that added/updated the observation unit of measure (e.g., ICD-9, ICD-10, SNOMED)."
+				},
+				"sourceVocabularyCode": 
+				{
+					"type": "string",
+					"description": "The most recent source vocabulary code for the vocabulary specified in StatussourceVocabulary"
+				},
+				"ihrterm": 
+				{
+					"type": "string",
+					"description": "The text for the code specified in StatussourceVocabularyCode"
+				}
+			},
+			"required": 
+			[
+				"sourceVocabulary",
+				"sourceVocabularyCode",
+				"ihrterm"
+			]
+		},
+
+		"ConditionObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"conditionStartDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"onsetDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"lastUpdateDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"healthCondition": 
+				{
+					"$ref": "#/definitions/CONDvocabObj"
+				},
+				"status": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/STATUSvocabObj"}]
+				}
+			},
+			"required": 
+			[
+				"lastUpdateDate",
+				"healthCondition"
+			]
+		},
+		"AllergenObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"adverseReactionType": 
+				{
+					"type": "string",
+					"description": "textual description of a high level category for the adverse reaction"
+				},
+				"allergen": 
+				{
+					"$ref": "#/definitions/ALLERGENvocabObj"
+				},
+				"reaction": 
+				{
+					"$ref": "#/definitions/REACTIONvocabObj"
+				},
+				"serverity": 
+				{
+					"$ref": "#/definitions/SEVERITYvocabObj"
+				},
+				"status": 
+				{
+					"$ref": "#/definitions/STATUSvocabObj"
+				},
+				"lastUpdateDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				}
+			},
+			"required": 
+			[
+				"allergen",
+				"lastUpdateDate"
+			]
+		},
+		"DosageFrequencyObj": 
+		{
+			"oneOf":[{ "type": "string" },
+				 { "type": "null" }]
+		},
+		"DosageVariableIntegerObj": 
+		{
+			"oneOf":[{ "type": "number", "minimum": 1 },
+				 { "type": "null" }
+				]
+		},
+		"HealthMedicationObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"medicationStartDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"medication": 
+				{
+					"$ref": "#/definitions/MEDICATIONvocabObj"
+				},
+				"medicationStatus": 
+				{
+					"oneOf":[{"type":"null"},
+					{ 
+					  "$ref": "#/definitions/STATUSvocabObj"
+					}]
+				},
+				"daysSupply": 
+				{
+					"$ref": "#/definitions/NumberOptionObj"
+				},
+				"dosageQuantity": 
+				{
+					"$ref": "#/definitions/NumberOptionObj"
+				},
+				"dosageFrequency": 
+				{
+					"$ref": "#/definitions/DosageFrequencyObj"
+				},
+				"dosageForm": 
+				{
+					"$ref": "#/definitions/DosageFormObj"
+				},
+				"lastFillDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"refillAuthorizedNumber": 
+				{
+					"$ref": "#/definitions/NumberOptionObj"
+				},
+				"indicationText": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"adminInstructions": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				}
+			},
+			"required": 
+			[
+				"medicationStartDate", 
+				"medication"
+			]
+		},
+		"SupplierObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"npinum": 
+				{
+					"$ref": "#/definitions/NPIobj"
+				},
+				"name": 
+				{
+					"type": "string"
+				}
+			}
+		},
+		"ProviderObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"deanum": 
+				{
+					"$ref": "#/definitions/DEAobj"
+				},
+				"npinum": 
+				{
+					"$ref": "#/definitions/NPIobj"
+				}
+			}
+		},
+		"HealthDeviceObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"medicalDeviceDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"medicalDevice": 
+				{
+					"$ref": "#/definitions/MEDDEVICEvocabObj"
+				},
+				"medicalDeviceStatus": 
+				{
+					"oneOf":[{"type":"null"},
+					  { 
+					    "$ref": "#/definitions/STATUSvocabObj"
+					  }]
+				},
+				"lastDispenseDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"supplier": 
+				{
+					"oneOf":[{"type":"null"},
+					  { 
+					    "$ref": "#/definitions/SupplierObj"
+					  }]
+				},
+				"prescribingProvider": 
+				{
+					"oneOf":[{"type":"null"},
+					  { 
+					    "$ref": "#/definitions/ProviderObj"
+					  }]
+				},
+				"indicationText": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				}
+			},
+			"required": 
+			[
+				"medicalDeviceDate", 
+				"medicalDevice"
+			]
+		},
+		"HealthMotivationScoreObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"observationDate": {
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"healthMotivationScore": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		},
+		"HealthEventObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"healthEventDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"healthEventOrderDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"healthEventCategoryText": 
+				{
+					"type": "string"
+				},
+				"healthEvent": 
+				{
+					"$ref": "#/definitions/EVENTvocabObj"
+				},
+				"healthEventStatus": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/STATUSvocabObj"}]
+				},
+				"specimen": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/SPECIMENvocabObj"}]
+				},
+				"presenceStateTerm": 
+				{
+					"$ref": "#/definitions/PresenceStateObj"
+				},
+				"lastUpdateDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				}
+			},
+			"required": 
+			[
+				"healthEventDate", 
+				"healthEvent",
+				"lastUpdateDate"
+			]
+		},
+		"VisitHistoryObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"admitDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"dischargeDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"visit": 
+				{
+					"$ref": "#/definitions/VISITvocabObj"
+				},
+				"dischargeDisposition": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/DISCHARGEvocabObj"}]
+				},
+				"admittingDiagnosis": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/DIAGNOSISvocabObj"}]
+				},
+				"dischargeDiagnosis": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/DIAGNOSISvocabObj"}]
+				},
+				"admitSource": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"presenceStateTerm": 
+				{
+					"$ref": "#/definitions/PresenceStateObj"
+				},
+				"lastUpdateDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				}
+			},
+			"required": 
+			[
+				"admitDate", 
+				"visit",
+				"lastUpdateDate"
+			]
+		},
+		"EvaluationStatusCodeObj": 
+		{
+			"enum": 
+			[
+				"MET","met","Met",
+				"NOTMET","notmet","Notmet"
+			]
+		},
+		"CareTeamObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"personRoleTerm": 
+				{
+					"type": "string"
+				},
+				"relatedEntityName": 
+				{
+					"type": "string"
+				},
+				"relatedEntityNPInum": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/NPIobj"}]
+				},
+				"relatedEntityMPIN": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/MPINobj"}]
+				},
+				"relatedEntityRoleTerm": 
+				{
+					"type": "string"
+				},
+				"relationshipStartDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"relationshipEndDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				}
+			},
+			"required": 
+			[
+				"personRoleTerm", 
+				"relatedEntityName", 
+				"relatedEntityRoleTerm",
+				"relationshipStartDate"
+			]
+		},
+		"ServiceFacilityObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"providerType": 
+				{
+					"type": "string"
+				},
+				"relatedEntityName": 
+				{
+					"type": "string"
+				},
+				"relatedEntityNPInum": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/NPIobj"}]
+				},
+				"relatedEntityMPIN": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/MPINobj"}]
+				},
+				"relationshipStartDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"relationshipEndDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				}
+			},
+			"required": 
+			[
+				"providerType", 
+				"relatedEntityName", 
+				"relationshipStartDate"
+			]
+		},
+		"CareGiverObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"relationshipToIndividual": 
+				{
+					"type": "string"
+				},
+				"relatedEntityName": 
+				{
+					"type": "string"
+				},
+				"relatedEntityRoleTerm": 
+				{
+					"type": "string"
+				},
+				"relationshipStartDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"relationshipEndDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				}
+			},
+			"required": 
+			[
+				"relationshipToIndividual", 
+				"relatedEntityName", 
+				"relationshipStartDate"
+			]
+		},
+		"HealthStatusGoalEvalObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"healthStatusID": 
+				{
+					"type": "string"
+				},
+				"healthStatus": 
+				{
+					"type": "string"
+				},
+				"healthStatusIndicator": 
+				{
+					"oneOf":[{"type":"null"},{"$ref": "#/definitions/EvaluationStatusCodeObj"}]
+				},
+				"healthStatusTarget": 
+				{
+					"type": "string"
+				},
+				"healthStatusResult": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"healthStatusUnitOfMeasure": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"evaluationDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"evaluationComment": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"healthStatusIntervention": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"healthStatusInterventionDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				}
+			},
+			"required": 
+			[
+				"evaluationDate",
+				"healthStatusID", 
+				"healthStatus", 
+				"healthStatusTarget"
+			]
+		},
+		"HealthStatusGoalObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"goalClassificationTerm": 
+				{
+					"type": "string"
+				},
+				"goalTerm": 
+				{
+					"type": "string"
+				},
+				"expectedAchievement": 
+				{
+					"$ref": "#/definitions/StringOptionObj"
+				},
+				"goalStartDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"goalDueDate": 
+				{
+					"$ref": "#/definitions/DateOptionObj"
+				},
+				"healthStatusGoalEval": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "#/definitions/HealthStatusGoalEvalObj"
+					}
+				}
+			},
+			"required": 
+			[
+				"goalTerm", 
+				"goalStartDate", 
+				"healthStatusGoalEval"
+			]
+		},
+		"HealthStatusObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"healthConditionTerm": 
+				{
+					"type": "string"
+				},
+				"healthStatusPresenceStateTerm": 
+				{
+					"$ref": "#/definitions/PresenceStateObj"
+				},
+				"healthStatusGoal": 
+				{
+					"type": "array",
+					"items": 
+					{
+						"$ref": "#/definitions/HealthStatusGoalObj"
+					}
+				}
+			},
+			"required": 
+			[
+				"healthConditionTerm", 
+				"healthStatusPresenceStateTerm", 
+				"healthStatusGoal"
+			]
+		},
+		"HealthObservationObj": 
+		{
+			"type": "object",
+			"properties": 
+			{
+				"observationDate": 
+				{
+					"$ref": "#/definitions/DateObj"
+				},
+				"observation": 
+				{
+					"$ref": "#/definitions/OBSERVATIONvocabObj"
+				},
+				"observationUnitOfMeasure": 
+				{
+					"$ref": "#/definitions/OBSERVATIONUNITvocabObj"
+				},
+				"observationValue": 
+				{
+					"$ref": "#/definitions/OBSERVATIONVALUEvocabObj"
+				},
+				"referenceRange": 
+				{
+					"type": "string"
+				},
+				"abnormalObservation": 
+				{
+					"$ref": "#/definitions/OBSERVATIONvocabObj"
+				}
+			},
+			"required": 
+			[
+				"observationDate", 
+				"observation"
+			]
+		}
+
+	},
+
+
+	"$comment":"Each IHR Individual Object",
+
+	"ActiveAdverseReaction":
+	{
+		"description": "v1.0 - This class of data contains all allergies and intolerances for a given allergen",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"ACTIVE_ADVERSE_REACTION"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"adverseReactions": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/AllergenObj"
+				}
+			}
+		},
+		"required":["recordType","language","adverseReactions"]
+	},
+
+	
+	"ActiveHealthCondition":
+	{
+		"description": "v1.0 - This class of data includes all chronic and acute health conditions which are active",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"ACTIVE_HEALTH_CONDITION"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"conditions": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/ConditionObj"
+				}
+			}
+		},
+		"required":["recordType","language","conditions"]
+	},
+	
+	
+	"ActiveHealthDevice":
+	{
+		"description": "v1.0 - This class includes devices implanted in an individual used to administer a medication or used by the individual in their daily activities of daily living (e.g. wheelchair).",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"ACTIVE_HEALTH_DEVICE"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"healthDevices": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthDeviceObj"
+				}
+			}
+		},
+		"required":["recordType","language","healthDevices"]
+	},
+	
+	"CareGiver":
+	{
+		"description": "v1.0 - This class includes all practitioners and healthcare staff who have attended to or are assigned to the individuals.",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"CARE_GIVER"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"careGiver": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/CareGiverObj"
+				}
+			}
+		},
+		"required":["recordType","language","careGiver"]
+	},
+	
+	"CareTeam":
+	{
+		"description": "v1.0 - This class includes all practitioners and healthcare staff who have attended to or are assigned to the individuals.",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"CARE_TEAM"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"careTeam": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/CareTeamObj"
+				}
+			}
+		},
+		"required":["recordType","language","careTeam"]
+	},
+	
+	"CurrentHealthMedication":
+	{
+		"description": "v1.0 - This class of data includes all medications, prescribed and over-the-counter (OTC) with activity within the last year",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"CURRENT_HEALTH_MEDICATION"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"medications": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthMedicationObj"
+				}
+			}
+		},
+		"required":["recordType","language","medications"]
+	},
+	
+	"HealthMotivationScore":
+	{
+		"description": "v1.0 - The Health Motivation Score will be sent to the cache.  This score is calculated by the IHR whenever data relevant to its computation is received. The score is a represented as a numeric value. The method for determining the Health Motivation Score has not been determined.  Methodologies are being investigated. ",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"HEALTH_MOTIVATION_SCORE"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"healthMotivationScore": {
+				"$ref": "#/definitions/HealthMotivationScoreObj"
+			}
+		},
+		"required": ["recordType", "language", "healthMotivationScore"]
+	},
+	
+	"HealthObservations":
+	{
+		"description": "v1.0 - This class includes key observations related to the values used monitor an individual’s health and in evaluating health status targets. These are typically represented as a numeric values. ",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"HEALTH_OBSERVATIONS"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"healthObservation": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthObservationObj"
+				}
+			}
+		},
+		"required":["recordType","language","healthObservation"]
+	},
+	
+	"HealthStatus":
+	{
+		"description": "v1.0 - This class includes the state of various health targets (e.g., health screening recommendations, disease prevention recommendations, disease guideline targets, etc.) which are evaluated whenever the IHR receives new data on an individual relevant to given target.",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"HEALTH_STATUS"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"healthStatus": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthStatusObj"
+				}
+			}
+		},
+		"required":["recordType","language","healthStatus"]
+	},
+	
+	"PastHealthCondition":
+	{
+		"description": "v1.0 - This class of data includes all chronic and acute health conditions which have been resolved or are no longer being treated",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"PAST_HEALTH_CONDITION"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"conditions": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/ConditionObj"
+				}
+			}
+		},
+		"required":["recordType","language","conditions"]
+	},
+	
+	"PastHealthMedication":
+	{
+		"description": "v1.0 - This class of data includes all medications, prescribed and over-the-counter (OTC) with activity within the last year",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"PAST_HEALTH_MEDICATION"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"medications": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthMedicationObj"
+				}
+			}
+		},
+		"required":["recordType","language","medications"]
+	},
+	
+	"ProcedureHistory":
+	{
+		"description": "v1.0 - This class includes the procedures performed or planned for the patient used to diagnosis or monitor a condition. ",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"PROCEDURE_HISTORY"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"procedureHistory": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthEventObj"
+				}
+			}
+		},
+		"required":["recordType","language","procedureHistory"]
+	},
+	
+	"ServiceFacilityProvider":
+	{
+		"description": "v1.0 - This class includes all practitioners and healthcare staff who have attended to or are assigned to the individuals.",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"SERVICE_FACILITY_PROVIDER"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"serviceProvider": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/ServiceFacilityObj"
+				}
+			}
+		},
+		"required":["recordType","language","serviceProvider"]
+	},
+	
+	"TestandExam":
+	{
+		"description": "v1.0 - This class includes the procedures performed or planned for the patient used to diagnosis or monitor a condition",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"TEST_AND_EXAM"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"testAndExam": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/HealthEventObj"
+				}
+			}
+		},
+		"required":["recordType","language","testAndExam"]
+	},
+	
+	"VisitHistory":
+	{
+		"description": "v1.0 - This class includes the procedures performed or planned for the patient used to diagnosis or monitor a condition. ",
+		"type": "object",
+		"properties": {
+			"recordType": {
+				"enum": [
+					"VISIT_HISTORY"
+				]
+			},
+			"language": {
+				"$ref": "#/definitions/LanguageObj"
+			},
+			"visitHistory": {
+				"type": "array",
+				"items": {
+					"$ref": "#/definitions/VisitHistoryObj"
+				}
+			}
+		},
+		"required":["recordType","language","visitHistory"]
+	},
+
+
+
+	"DataClassCodeObj": 
+	{
+		"type": "string",
+		"enum": 
+		[
+			"ACTIVE_HEALTH_CONDITION",
+			"PAST_HEALTH_CONDITION",
+			"CURRENT_HEALTH_MEDICATION",
+			"PAST_HEALTH_MEDICATION",
+			"ACTIVE_ADVERSE_REACTION",
+			"ACTIVE_HEALTH_DEVICE",
+			"PROCEDURE_HISTORY",
+			"VISIT_HISTORY",
+			"CARE_TEAM",
+			"CARE_GIVER",
+			"TEST_AND_EXAM",
+			"SERVICE_FACILITY_PROVIDER",
+			"HEALTH_STATUS",
+			"HEALTH_MOTIVATION_SCORE",
+			"HEALTH_OBSERVATIONS"
+		]
+	},
+
+	"DataDebugObj":
+	{
+				"$ref": "#/HealthObservations"
+	},
+
+	"DataClassObj": 
+	{
+		"anyOf": 
+		[
+			{
+				"$ref": "#/ActiveAdverseReaction"
+			},
+			{
+				"$ref": "#/ActiveHealthCondition"
+			},
+			{
+				"$ref": "#/ActiveHealthDevice"
+			},
+			{
+				"$ref": "#/CareGiver"
+			},
+			{
+				"$ref": "#/CareTeam"
+			},
+			{
+				"$ref": "#/CurrentHealthMedication"
+			},
+			{
+				"$ref": "#/HealthMotivationScore"
+			},
+			{
+				"$ref": "#/HealthObservations"
+			},
+			{
+				"$ref": "#/HealthStatus"
+			},
+			{
+				"$ref": "#/PastHealthCondition"
+			},
+			{
+				"$ref": "#/PastHealthMedication"
+			},
+			{
+				"$ref": "#/ProcedureHistory"
+			},
+			{
+				"$ref": "#/ServiceFacilityProvider"
+			},
+			{
+				"$ref": "#/TestandExam"
+			},
+			{
+				"$ref": "#/VisitHistory"
+			}
+		]
+	},
+	"ErrCodeObj": 
+	{
+		"enum": 
+		[
+			{
+				"200": "OK"
+			},
+			{
+				"201": "Created"
+			},
+			{
+				"400": "Bad Request"
+			},
+			{
+				"401": "Unauthorized"
+			},
+			{
+				"404": "Not Found"
+			},
+			{
+				"500": "Internal Server Error"
+			},
+			{
+				"503": "Service Unavailable"
+			}
+		]
+	},
+
+
+
+   "type": "object",
+   "properties": {
+	"correlationId": {"type": "string"},
+	"language": {
+		"$ref": "#/definitions/LanguageObj"
+	},
+
+	"mbrID": {
+		"$ref": "#/definitions/IDobj"
+	},
+	
+	"dataClasses": {
+        	"type":"array",
+       		"items": { 
+			"$ref":"#/DataDebugObj", 
+			"$comment":"#/DataDebugObj" 
+		}
+	}
+   },
+   "required": ["correlationId", "language", "mbrID", "dataClasses"]
+}

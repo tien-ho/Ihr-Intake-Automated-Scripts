@@ -1,0 +1,33 @@
+{
+    "correlationId": "123",
+    "language": "EN",
+    "mbrID": {
+      "big5": {
+        "firstName" : "<*First>",
+        "lastName" : "<*Last>",
+        "dateOfBirth" : "<*Dob>",
+        "policyNumber" : "<*Policy>",
+        "searchId" : "<*SearchID>"
+      },
+        "idType" : "RALLYID",
+        "idValue" : "<*RallyID>"
+    },
+    "dataClasses":
+      [
+        "ACTIVE_ADVERSE_REACTION",
+        "ACTIVE_HEALTH_CONDITION",
+        "ACTIVE_HEALTH_DEVICE",
+        "CARE_GIVER",
+        "CARE_TEAM",
+        "CURRENT_HEALTH_MEDICATION",
+        "HEALTH_MOTIVATION_SCORE",
+        "HEALTH_OBSERVATIONS",
+        "HEALTH_STATUS",
+        "PAST_HEALTH_CONDITION",
+        "PAST_HEALTH_MEDICATION",
+        "PROCEDURE_HISTORY",
+        "SERVICE_FACILITY_PROVIDER",
+        "TEST_AND_EXAM",
+        "VISIT_HISTORY"
+      ]
+}

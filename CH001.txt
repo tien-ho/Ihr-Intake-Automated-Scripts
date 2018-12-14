@@ -1,0 +1,33 @@
+{
+    "correlationId": "123",
+    "language": "EN",
+    "mbrID": {
+      "big5": {
+        "firstName" : "FirstName41388",
+        "lastName" : "LastName41388",
+        "dateOfBirth" : "1940/03/26",
+        "policyNumber" : "5W3542",
+        "searchId" : "51434689"
+      },
+        "idType" : "RALLYID",
+        "idValue" : "ea7bcacd-b68f-4ba3-98f2-c5fe5f8dce65"
+    },
+    "dataClasses":
+      [
+        "ACTIVE_ADVERSE_REACTION",
+        "ACTIVE_HEALTH_CONDITION",
+        "ACTIVE_HEALTH_DEVICE",
+        "CARE_GIVER",
+        "CARE_TEAM",
+        "CURRENT_HEALTH_MEDICATION",
+        "HEALTH_MOTIVATION_SCORE",
+        "HEALTH_OBSERVATIONS",
+        "HEALTH_STATUS",
+        "PAST_HEALTH_CONDITION",
+        "PAST_HEALTH_MEDICATION",
+        "PROCEDURE_HISTORY",
+        "SERVICE_FACILITY_PROVIDER",
+        "TEST_AND_EXAM",
+        "VISIT_HISTORY"
+      ]
+}
