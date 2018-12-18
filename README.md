@@ -14,4 +14,11 @@
    or python CHTest.py > results.log
 
 
+   CHTest.py uses input file myList.csv
+   CHTest_Integration.py uses input file myList_Integration.csv
+   CHTest_LoadTest.py uses input file myList_LoadTest.csv
+   CHTest_BlueSteel.py uses input file myList_BlueSteel.csv
+
+
+
 
